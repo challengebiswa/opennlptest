@@ -18,7 +18,7 @@ public class NameFinderME_Example {
       //TokenizerModel tokenizerModel=new TokenizerModel(inputStream);
       //Instantiating the NameFinder class 
       NameFinderME nameFinder = new NameFinderME(model); 
-      String sen = "Mike is senior programming manager and <start:person>Rama<end> is a clerk both are working at"; 
+      String sen = "Mike is senior programming manager and Rama is a clerk both are working at"; 
     	      
       //Getting the sentence in the form of String array  
       String [] sentence =SimpleTokenizer.INSTANCE.tokenize(sen);

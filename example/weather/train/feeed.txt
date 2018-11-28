@@ -1,0 +1,12 @@
+Other good morning /
+Other good evening /
+Other have you any update on negombo road till wattala /
+Other perhaps the madness was always there but only the schools bring it out? /
+Other sorry didn't notice geotag /
+Feed high traffic in wattala /
+Feed low traffic in <START:location>negombo<END> road /
+Feed moving traffic in wattala /
+Feed nawala bridge area clear /
+Feed no traffic at all at ja-ela /
+Flight I am traveling from kolkata
+FlightDtl I am traveling from kolkata to delhi

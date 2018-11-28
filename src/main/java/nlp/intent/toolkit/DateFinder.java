@@ -17,7 +17,7 @@ public class DateFinder {
 		      TokenizerModel tokenModel = new TokenizerModel(inputStreamTokenizer); 
 		       
 		      //String paragraph = "Mike and Smith are classmates"; 
-		      String paragraph = "22nd December and 1st Feb"; 
+		      String paragraph = "22nd December 2018 and 1st Feb"; 
 		        
 		      //Instantiating the TokenizerME class 
 		      TokenizerME tokenizer = new TokenizerME(tokenModel); 
