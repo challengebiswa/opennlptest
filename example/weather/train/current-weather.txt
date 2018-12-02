@@ -33,3 +33,6 @@ I am travelling from <START:city> kolkata <END> to <START:city> delhi <END>
 I am travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> monday <END> at <START:time> 9pm <END>
 we are travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> saturday <END>
 we are travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> monday <END> at <START:time> 9pm <END>
+we are travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> saturday <END> for <START:job> interview <END>
+we are travelling from <START:city> kolkata <END> to <START:city> delhi <END> for <START:job> interview <END>
+we are travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> saturday <END> for <START:job> work <END>
