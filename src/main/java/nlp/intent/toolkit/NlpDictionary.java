@@ -18,7 +18,7 @@ import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.util.Span;
 import opennlp.tools.util.StringList;
 
-public class CustomDictionary {
+public class NlpDictionary {
 	private static List<DictionaryNameFinder> finders;
 	
 	public static void getMatchDict(String text) {
@@ -43,14 +43,14 @@ public class CustomDictionary {
              e.printStackTrace();
          }
 		 
-		 	CustomDictionary ner = new CustomDictionary();		
+		 	NlpDictionary ner = new NlpDictionary();		
 	        List<Annotation> annotations = ner.find(tokenizer.tokenize(text));
 	        for (Annotation annotation : annotations) {
 	            for (String token : annotation.getTokens()) {
-	                System.out.printf("%s ", token);
+	                System.out.println("\n  dictionary match- "+token);
 	            }
 	            Span span = annotation.getSpan();
-	            System.out.printf("[%d..%d) %s\n", span.getStart(), span.getEnd(), span.getType());
+	           // System.out.printf("[%d..%d) %s\n", span.getStart(), span.getEnd(), span.getType());
 	        }
 	        
 	
@@ -58,7 +58,7 @@ public class CustomDictionary {
 	
 	public static void main(String[] args) {
 		
-		CustomDictionary.getMatchDict("The Lord comes here");
+		NlpDictionary.getMatchDict("The Lord comes here");
 	}
 	
 	public List<Annotation> find(String[] tokens) {

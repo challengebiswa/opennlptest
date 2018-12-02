@@ -34,7 +34,7 @@ import opennlp.tools.util.PlainTextByLineStream;
 import opennlp.tools.util.Span;
 import opennlp.tools.util.TrainingParameters;
 
-public class SampleTrainExample {
+public class NlpTrain {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
@@ -96,8 +96,8 @@ public class SampleTrainExample {
             for (int i = 0; i < names.length; i++) {
                 if(i > 0) { System.out.print(", "); }
                 System.out.print(names[i].getType() + ": '" + intentNames[i] + "' ");
-                intentMap=SampleTrainExample.insrtMap(intentMap, intentNames[i], names[i].getType(), lemmas);
-                  	CustomDictionary.getMatchDict(intentNames[i]);
+                intentMap=NlpTrain.insrtMap(intentMap, intentNames[i], names[i].getType(), lemmas);
+                  	NlpDictionary.getMatchDict(intentNames[i]);
                
             }
             
