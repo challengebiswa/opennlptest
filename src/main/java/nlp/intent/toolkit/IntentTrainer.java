@@ -28,93 +28,85 @@ import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.model.ModelType;
 
 public class IntentTrainer {
+	
+	 public static void main(String[] args) throws Exception {
 
-    public static void main(String[] args) throws Exception {
+	        File trainingDirectory = new File("E:\\projects\\Nlp\\opennlptest\\opennlptest\\example\\weather\\train");
+	        String[] slots = new String[0];
+	       /* if (args.length > 1) {
+	            slots = args[1].split(",");
+	        }*/
 
-        File trainingDirectory = new File("E:\\projects\\Nlp\\nlp-intent-toolkit-master\\nlp-intent-toolkit-master\\example\\weather\\train");
-        String[] slots = new String[0];
-        if (args.length > 1) {
-            slots = args[1].split(",");
-        }
-        System.out.println(slots);
+	        if (!trainingDirectory.isDirectory()) {
+	            throw new IllegalArgumentException("TrainingDirectory is not a directory: " + trainingDirectory.getAbsolutePath());
+	        }
 
-        if (!trainingDirectory.isDirectory()) {
-            throw new IllegalArgumentException("TrainingDirectory is not a directory: " + trainingDirectory.getAbsolutePath());
-        }
+	        List<ObjectStream<DocumentSample>> categoryStreams = new ArrayList<ObjectStream<DocumentSample>>();
+	        for (File trainingFile : trainingDirectory.listFiles()) {
+	            String intent = trainingFile.getName().replaceFirst("[.][^.]+$", "");
+	            ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainingFile), "UTF-8");
+	            ObjectStream<DocumentSample> documentSampleStream = new IntentDocumentSampleStream(intent, lineStream);
+	            categoryStreams.add(documentSampleStream);
+	        }
 
-        List<ObjectStream<DocumentSample>> categoryStreams = new ArrayList<ObjectStream<DocumentSample>>();
-        for (File trainingFile : trainingDirectory.listFiles()) {
-            String intent = trainingFile.getName().replaceFirst("[.][^.]+$", "");
-            ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainingFile), "UTF-8");
-            ObjectStream<DocumentSample> documentSampleStream = new IntentDocumentSampleStream(intent, lineStream);
-            categoryStreams.add(documentSampleStream);
-        }
+	        ObjectStream<DocumentSample> combinedDocumentSampleStream = ObjectStreamUtils.concatenateObjectStream(categoryStreams);
 
-        ObjectStream<DocumentSample> combinedDocumentSampleStream = ObjectStreamUtils.concatenateObjectStream(categoryStreams);
+	        TrainingParameters trainingParams = new TrainingParameters();
+	        trainingParams.put(TrainingParameters.ITERATIONS_PARAM, 10);
+	        trainingParams.put(TrainingParameters.CUTOFF_PARAM, 0);
 
-        TrainingParameters trainingParams = new TrainingParameters();
-        trainingParams.put(TrainingParameters.ALGORITHM_PARAM, ModelType.MAXENT.toString());
-        trainingParams.put(TrainingParameters.TRAINER_TYPE_PARAM, EventTrainer.EVENT_VALUE);
-        trainingParams.put(TrainingParameters.ITERATIONS_PARAM, 100);
-        trainingParams.put(TrainingParameters.CUTOFF_PARAM, 5);
+	        DoccatModel doccatModel = DocumentCategorizerME.train("en", combinedDocumentSampleStream, trainingParams, new DoccatFactory());
+	        combinedDocumentSampleStream.close();
 
-        DoccatModel doccatModel = DocumentCategorizerME.train("en", combinedDocumentSampleStream, trainingParams, new DoccatFactory());
-        combinedDocumentSampleStream.close();
+	        List<TokenNameFinderModel> tokenNameFinderModels = new ArrayList<TokenNameFinderModel>();
 
-        List<TokenNameFinderModel> tokenNameFinderModels = new ArrayList<TokenNameFinderModel>();
+	        //for (String slot : slots) {
+	            List<ObjectStream<NameSample>> nameStreams = new ArrayList<ObjectStream<NameSample>>();
+	            for (File trainingFile : trainingDirectory.listFiles()) {
+	                ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainingFile), "UTF-8");
+	                ObjectStream<NameSample> nameSampleStream = new NameSampleDataStream(lineStream);
+	                nameStreams.add(nameSampleStream);
+	            }
+	            ObjectStream<NameSample> combinedNameSampleStream = ObjectStreamUtils.concatenateObjectStream(nameStreams);
 
-        for (String slot : slots) {
-            List<ObjectStream<NameSample>> nameStreams = new ArrayList<ObjectStream<NameSample>>();
-            for (File trainingFile : trainingDirectory.listFiles()) {
-                ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainingFile), "UTF-8");
-                ObjectStream<NameSample> nameSampleStream = new NameSampleDataStream(lineStream);
-                nameStreams.add(nameSampleStream);
-            }
-            ObjectStream<NameSample> combinedNameSampleStream = ObjectStreamUtils.concatenateObjectStream(nameStreams);
-
-            TokenNameFinderModel tokenNameFinderModel = NameFinderME.train("en", null, combinedNameSampleStream, trainingParams, new TokenNameFinderFactory());
-            combinedNameSampleStream.close();
-            tokenNameFinderModels.add(tokenNameFinderModel);
-        }
+	            TokenNameFinderModel tokenNameFinderModel = NameFinderME.train("en", "dlocation", combinedNameSampleStream, trainingParams, new TokenNameFinderFactory());
+	            combinedNameSampleStream.close();
+	            tokenNameFinderModels.add(tokenNameFinderModel);
+	       // }
 
 
-        DocumentCategorizerME categorizer = new DocumentCategorizerME(doccatModel);
-        NameFinderME[] nameFinderMEs = new NameFinderME[tokenNameFinderModels.size()];
-        for (int i = 0; i < tokenNameFinderModels.size(); i++) {
-            nameFinderMEs[i] = new NameFinderME(tokenNameFinderModels.get(i));
-        }
+	        DocumentCategorizerME categorizer = new DocumentCategorizerME(doccatModel);
+	        NameFinderME[] nameFinderMEs = new NameFinderME[tokenNameFinderModels.size()];
+	        for (int i = 0; i < tokenNameFinderModels.size(); i++) {
+	            nameFinderMEs[i] = new NameFinderME(tokenNameFinderModels.get(i));
+	        }
 
-        System.out.println("Training complete. Ready.");
-        System.out.print(">");
-        String s;
+	        System.out.println("Training complete. Ready.");
+	        System.out.print(">");
+	        String s="I am travelling from kolkata";
 
-        InputStream modelIn = new FileInputStream("./models/en-token.bin");
-        TokenizerModel model = new TokenizerModel(modelIn);
-        Tokenizer tokenizer = new TokenizerME(model);
-         s="She told me that he lived in 23213 Edinburgh";
+	        InputStream modelIn = new FileInputStream("./models/en-token.bin");
+	        TokenizerModel model = new TokenizerModel(modelIn);
+	        Tokenizer tokenizer = new TokenizerME(model);
 
-      
-            double[] outcome = categorizer.categorize(tokenizer.tokenize(s));
-            System.out.print("{ action: '" + categorizer.getBestCategory(outcome) + "', args: { ");
 
-            String[] tokens = tokenizer.tokenize(s);
-            
-            
-            
-            
-            for (NameFinderME nameFinderME : nameFinderMEs) {
-                Span[] spans = nameFinderME.find(tokens);
-                String[] names = Span.spansToStrings(spans, tokens);
-                for (int i = 0; i < spans.length; i++) {
-                    if(i > 0) { System.out.print(", "); }
-                    System.out.print(spans[i].getType() + ": '" + names[i] + "' ");
-                }
-              //  nameFinderME.clearAdaptiveData();
-            }
-            System.out.println("} }");
-            System.out.print(">");
+	            double[] outcome = categorizer.categorize(tokenizer.tokenize(s));
+	            System.out.print("{ action: '" + categorizer.getBestCategory(outcome) + "', args: { ");
 
-        
-    }
+	            String[] tokens = tokenizer.tokenize(s);
+	            for (NameFinderME nameFinderME : nameFinderMEs) {
+	                Span[] spans = nameFinderME.find(tokens);
+	                String[] names = Span.spansToStrings(spans, tokens);
+	                for (int i = 0; i < spans.length; i++) {
+	                    if(i > 0) { System.out.print(", "); }
+	                    System.out.print(spans[i].getType() + ": '" + names[i] + "' ");
+	                }
+	            }
+	            System.out.println("} }");
+	            System.out.print(">");
 
-}
+	        
+	    }
+
+	}
+

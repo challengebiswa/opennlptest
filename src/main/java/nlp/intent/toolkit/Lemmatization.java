@@ -14,7 +14,7 @@ public class Lemmatization {
 	
 	public static void main(String[] args) throws Exception {
 		SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
-	    String[] tokens = tokenizer.tokenize("John has a sister named Penny.");
+	    String[] tokens = tokenizer.tokenize("send me status report on friday");
 	 
 	    InputStream inputStreamPOSTagger = new FileInputStream("./models/en-pos-maxent.bin");
 	    POSModel posModel = new POSModel(inputStreamPOSTagger);

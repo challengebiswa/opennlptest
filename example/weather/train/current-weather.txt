@@ -14,7 +14,7 @@ how is <START:city> Denver <END> today
 is <START:city> Chicago <END> cold
 is <START:city> Miami <END> hot
 show me the current conditions
-what's the temperature in <START:city> new york <END>
+what's the temperature in <START:city> new york <END> on <START:day> friday <END> time <START:time> evening <END>
 show me current conditions for <START:city> san francisco <END>
 what's the weather look like in <START:city> Chicago <END> ?
 is it raining in <START:city> Seattle <END>
@@ -29,3 +29,7 @@ how hot is it in <START:city> miami <END>
 how cold is it <START:city> anchorage <END>
 is it snowing in <START:city> denver <END> ?
 show me the current conditions for <START:city> detroit <END>
+I am travelling from <START:city> kolkata <END> to <START:city> delhi <END>
+I am travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> monday <END> at <START:time> 9pm <END>
+we are travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> saturday <END>
+we are travelling from <START:city> kolkata <END> to <START:city> delhi <END> on <START:day> monday <END> at <START:time> 9pm <END>

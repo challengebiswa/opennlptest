@@ -12,6 +12,7 @@ import opennlp.tools.doccat.DocumentCategorizerME;
 import opennlp.tools.doccat.DocumentSampleStream;
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
@@ -111,11 +112,12 @@ try {
   String predictedCategory = classificationME.getBestCategory(classDistribution);
   System.out.println("Model prediction : " + predictedCategory);
   try {
-	new PosTaggerExample().getPos("I am travelling from kolkata to delhi");
+	new PosTaggerExample().getPos("Feed low traffic in kolkata road");
 } catch (Exception e) {
 	// TODO Auto-generated catch block
 	e.printStackTrace();
 }
+  
   
  }
 }
